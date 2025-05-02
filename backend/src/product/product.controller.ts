@@ -9,10 +9,12 @@ import {
   ValidationPipe,
   UsePipes,
   ParseIntPipe,
+  Query,
 } from '@nestjs/common';
 import { ProductService } from './product.service';
 import { CreateProductDto } from './dto/create-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
+import { ApiQuery } from '@nestjs/swagger';
 
 @Controller('product')
 export class ProductController {
@@ -25,8 +27,24 @@ export class ProductController {
   }
 
   @Get()
-  findAll() {
-    return this.productService.findAll();
+  @UsePipes(ValidationPipe)
+  @ApiQuery({ name: 'search', required: false })
+  @ApiQuery({ name: 'categoryId', required: false, type: Number })
+  @ApiQuery({ name: 'limit', required: false, type: Number })
+  @ApiQuery({ name: 'page', required: false, type: Number })
+  findAll(
+    @Query('search') search?: string,
+    @Query('categoryId', new ParseIntPipe({ optional: true }))
+    categoryId?: number,
+    @Query('page', new ParseIntPipe({ optional: true })) page?: number,
+    @Query('limit', new ParseIntPipe({ optional: true })) limit?: number,
+  ) {
+    return this.productService.findAll({
+      search,
+      categoryId,
+      page: page,
+      limit: limit,
+    });
   }
 
   @Get(':id')
