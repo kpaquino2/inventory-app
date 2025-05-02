@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { Prisma } from '@prisma/client';
 
@@ -44,18 +44,41 @@ export class ProductService {
     });
   }
 
-  findOne(id: number) {
-    return this.prisma.product.findUnique({ where: { id } });
+  async findOne(id: number) {
+    const product = await this.prisma.product.findUnique({ where: { id } });
+    if (!product)
+      throw new NotFoundException(`Product with ID ${id} not found`);
+    return product;
   }
 
-  update(id: number, updateProductData: Prisma.ProductUpdateInput) {
-    return this.prisma.product.update({
-      where: { id },
-      data: updateProductData,
-    });
+  async update(id: number, updateProductData: Prisma.ProductUpdateInput) {
+    try {
+      return await this.prisma.product.update({
+        where: { id },
+        data: updateProductData,
+      });
+    } catch (error) {
+      if (
+        error instanceof Prisma.PrismaClientKnownRequestError &&
+        error.code === 'P2025' // Prisma's "Record not found" error code
+      ) {
+        throw new NotFoundException(`Product with ID ${id} not found`);
+      }
+      throw error; // Re-throw other errors
+    }
   }
 
-  remove(id: number) {
-    return this.prisma.product.delete({ where: { id } });
+  async remove(id: number) {
+    try {
+      return await this.prisma.product.delete({ where: { id } });
+    } catch (error) {
+      if (
+        error instanceof Prisma.PrismaClientKnownRequestError &&
+        error.code === 'P2025' // Prisma's "Record not found" error code
+      ) {
+        throw new NotFoundException(`Product with ID ${id} not found`);
+      }
+      throw error; // Re-throw other errors
+    }
   }
 }
