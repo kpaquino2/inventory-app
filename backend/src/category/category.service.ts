@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { Prisma } from '@prisma/client';
 
@@ -14,18 +14,39 @@ export class CategoryService {
     return this.prisma.category.findMany();
   }
 
-  findOne(id: number) {
-    return this.prisma.category.findUnique({ where: { id } });
+  async findOne(id: number) {
+    const category = await this.prisma.category.findUnique({ where: { id } });
+    if (!category)
+      throw new NotFoundException(`Category with ID ${id} not found`);
+    return category;
   }
 
-  update(id: number, updateCategoryData: Prisma.CategoryUpdateInput) {
-    return this.prisma.category.update({
-      where: { id },
-      data: updateCategoryData,
-    });
+  async update(id: number, updateCategoryData: Prisma.CategoryUpdateInput) {
+    try {
+      return await this.prisma.category.update({
+        where: { id },
+        data: updateCategoryData,
+      });
+    } catch (error) {
+      if (
+        error instanceof Prisma.PrismaClientKnownRequestError &&
+        error.code === 'P2025'
+      ) {
+        throw new NotFoundException(`Category with ID ${id} not found`);
+      }
+    }
   }
 
-  remove(id: number) {
-    return this.prisma.category.delete({ where: { id } });
+  async remove(id: number) {
+    try {
+      return await this.prisma.category.delete({ where: { id } });
+    } catch (error) {
+      if (
+        error instanceof Prisma.PrismaClientKnownRequestError &&
+        error.code === 'P2025'
+      ) {
+        throw new NotFoundException(`Category with ID ${id} not found`);
+      }
+    }
   }
 }
