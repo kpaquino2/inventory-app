@@ -1,6 +1,7 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { Prisma } from '@prisma/client';
+import { GetProductsDto } from './dto/get-products.dto';
 
 @Injectable()
 export class ProductService {
@@ -15,17 +16,7 @@ export class ProductService {
     });
   }
 
-  findAll({
-    search,
-    categoryId,
-    page = 1, // Default: Page 1
-    limit = 10, // Default: 10 items per page
-  }: {
-    search?: string;
-    categoryId?: number;
-    page?: number;
-    limit?: number;
-  }) {
+  findAll({ search, categoryId, page, limit }: GetProductsDto) {
     // filters by search query or categoryId, whichever is present
     return this.prisma.product.findMany({
       where: {
