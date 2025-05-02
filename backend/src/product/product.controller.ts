@@ -6,8 +6,6 @@ import {
   Patch,
   Param,
   Delete,
-  ValidationPipe,
-  UsePipes,
   ParseIntPipe,
   Query,
 } from '@nestjs/common';
@@ -21,13 +19,11 @@ export class ProductController {
   constructor(private readonly productService: ProductService) {}
 
   @Post()
-  @UsePipes(ValidationPipe)
   create(@Body() { categoryId, ...createProductDto }: CreateProductDto) {
     return this.productService.create(categoryId, createProductDto);
   }
 
   @Get()
-  @UsePipes(ValidationPipe)
   @ApiQuery({ name: 'search', required: false })
   @ApiQuery({ name: 'categoryId', required: false, type: Number })
   @ApiQuery({ name: 'limit', required: false, type: Number })

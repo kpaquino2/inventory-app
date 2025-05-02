@@ -6,8 +6,6 @@ import {
   Patch,
   Param,
   Delete,
-  UsePipes,
-  ValidationPipe,
   ParseIntPipe,
 } from '@nestjs/common';
 import { CategoryService } from './category.service';
@@ -19,7 +17,6 @@ export class CategoryController {
   constructor(private readonly categoryService: CategoryService) {}
 
   @Post()
-  @UsePipes(ValidationPipe)
   create(@Body() createCategoryDto: CreateCategoryDto) {
     return this.categoryService.create(createCategoryDto);
   }
@@ -35,7 +32,6 @@ export class CategoryController {
   }
 
   @Patch(':id')
-  @UsePipes(ValidationPipe)
   update(
     @Param('id', ParseIntPipe) id: number,
     @Body() updateCategoryDto: UpdateCategoryDto,
