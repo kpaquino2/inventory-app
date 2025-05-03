@@ -3,8 +3,6 @@ import { AppModule } from './app.module';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { ValidationPipe } from '@nestjs/common';
 
-// TODO unit tests for product endpoints
-// TODO try docker
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
