@@ -3,13 +3,15 @@ import { AppModule } from './app.module';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { ValidationPipe } from '@nestjs/common';
 
+// TODO unit tests for product endpoints
+// TODO try docker
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
   // create new swagger document configuration
   const config = new DocumentBuilder()
     .setTitle('Inventory API')
-    .setDescription('Inventory management system')
+    .setDescription('Inventory management syst em')
     .setVersion('0.1')
     .build();
 
