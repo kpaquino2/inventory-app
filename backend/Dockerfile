@@ -19,5 +19,5 @@ RUN npx prisma generate
 # Expose port (matches NestJS default)
 EXPOSE 3000
 
-# Start in dev mode (hot-reload enabled)
-CMD ["npm", "run", "start:dev"]
+# Start in dev mode
+CMD ["npm", "run", "start:migrate:dev"]
