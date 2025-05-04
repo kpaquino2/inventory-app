@@ -1,7 +1,11 @@
 import { Ionicons } from "@expo/vector-icons";
-import { Tabs } from "expo-router";
+import { Redirect, Tabs } from "expo-router";
 
 export default function TabLayout() {
+  const session = false;
+
+  if (!session) return <Redirect href="./(auth)/login" />;
+
   return (
     <Tabs
       screenOptions={{
