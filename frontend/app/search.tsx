@@ -43,7 +43,7 @@ export default function SearchResults() {
       ) : results.length > 0 ? (
         <FlatList
           data={results}
-          keyExtractor={(item) => item.id}
+          keyExtractor={(item) => `${item.id}`}
           renderItem={({ item }) => <ProductItem item={item} />}
           ListFooterComponent={() => (
             <Pagination page={page} setPage={setPage} hasMore={hasMore} />

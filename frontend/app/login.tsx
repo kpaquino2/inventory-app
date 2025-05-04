@@ -28,7 +28,7 @@ export default function Login() {
 
   const session = authStore.user;
 
-  if (session) return <Redirect href="/(tabs)" />;
+  if (session) return <Redirect href="/(tabs)/home/index" />;
 
   const handleLogin = async () => {
     if (!username || !password || !(isLogin || name)) {
@@ -56,7 +56,7 @@ export default function Login() {
       }
       await SecureStore.setItem("access-token", response.data.access_token);
       await authStore.setAuth(response.data.user);
-      router.replace("/(tabs)");
+      router.replace("./(tabs)/(home)/");
     } catch (error) {
       handleApiError(error);
     } finally {
