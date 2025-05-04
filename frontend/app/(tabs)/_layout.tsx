@@ -1,10 +1,13 @@
+import { useAuthStore } from "@/stores/authStore";
 import { Ionicons } from "@expo/vector-icons";
 import { Redirect, Tabs } from "expo-router";
 
 export default function TabLayout() {
-  const session = false;
+  const authStore = useAuthStore();
 
-  if (!session) return <Redirect href="./(auth)/login" />;
+  const session = authStore.user;
+
+  if (!session) return <Redirect href="../login" />;
 
   return (
     <Tabs
