@@ -20,7 +20,7 @@ export default function CategoryItem({ item }: { item: Category }) {
         }}
       >
         <Image
-          source={require("../assets/images/placeholder.jpg")}
+          source={require("@/assets/images/placeholder.jpg")}
           style={{
             width: "100%",
             // aspectRatio: 1,

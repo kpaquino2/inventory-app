@@ -5,7 +5,7 @@ export default function ProductItem({ item }: { item: Product }) {
   return (
     <View className="flex-row" style={{ padding: 12 }}>
       <Image
-        source={require("../assets/images/placeholder.jpg")}
+        source={require("@/assets/images/placeholder.jpg")}
         style={{
           width: 48,
           height: 48,
