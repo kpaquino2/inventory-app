@@ -1,14 +1,7 @@
+import { User } from "@/types/user";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { create } from "zustand";
 import { createJSONStorage, persist } from "zustand/middleware";
-
-enum Position {
-  USER,
-  AUDITOR,
-  ADMIN,
-}
-
-type User = { id: string; username: string; name: string; position: Position };
 
 interface AuthState {
   user: User | null;
