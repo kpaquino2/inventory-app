@@ -2,6 +2,7 @@ import api from "@/api/axios";
 import Pagination from "@/components/Pagination";
 import ProductItem from "@/components/ProductItem";
 import SearchHeader from "@/components/SearchHeader";
+import { useSettingsStore } from "@/stores/settingsStore";
 import { Product } from "@/types/product";
 import { useLocalSearchParams } from "expo-router";
 import { useEffect, useState } from "react";
@@ -15,6 +16,8 @@ export default function SearchResults() {
   const [page, setPage] = useState(1);
   const [hasMore, setHasMore] = useState(false);
 
+  const settingsStore = useSettingsStore();
+
   useEffect(() => {
     if (!q) return;
 
@@ -22,16 +25,20 @@ export default function SearchResults() {
     setHasMore(false);
 
     api
-      .get(`/product?search=${q}&page=${page}`)
+      .get(`/product?search=${q}&page=${page}&limit=${settingsStore.limit}`)
       .then((res) => {
         setResults(res.data);
-        api.get(`/product?search=${q}&page=${page + 1}`).then((res) => {
-          setHasMore(res.data.length > 0);
-        });
+        api
+          .get(
+            `/product?search=${q}&page=${page + 1}&limit=${settingsStore.limit}`
+          )
+          .then((res) => {
+            setHasMore(res.data.length > 0);
+          });
       })
       .catch((err) => console.error(err))
       .finally(() => setLoading(false));
-  }, [q, page]);
+  }, [q, page, settingsStore.limit]);
 
   return (
     <SafeAreaView className="flex-1 bg-white">

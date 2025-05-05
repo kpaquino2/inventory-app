@@ -1,6 +1,7 @@
 import api from "@/api/axios";
 import Pagination from "@/components/Pagination";
 import ProductItem from "@/components/ProductItem";
+import { useSettingsStore } from "@/stores/settingsStore";
 import { Category } from "@/types/category";
 import { Product } from "@/types/product";
 import { Ionicons } from "@expo/vector-icons";
@@ -23,6 +24,7 @@ export default function CategorProducts() {
   const [hasMore, setHasMore] = useState(false);
 
   const router = useRouter();
+  const settingsStore = useSettingsStore();
 
   useEffect(() => {
     setLoading(true);
@@ -30,18 +32,24 @@ export default function CategorProducts() {
     api.get(`/category/${categoryId}`).then((res) => setCategory(res.data));
 
     api
-      .get(`/product?categoryId=${categoryId}&page=${page}`)
+      .get(
+        `/product?categoryId=${categoryId}&page=${page}&limit=${settingsStore.limit}`
+      )
       .then((res) => {
         setProducts(res.data);
         api
-          .get(`/product?categoryId=${categoryId}&page=${page + 1}`)
+          .get(
+            `/product?categoryId=${categoryId}&page=${page + 1}&limit=${
+              settingsStore.limit
+            }`
+          )
           .then((res) => {
             setHasMore(res.data.length > 0);
           });
       })
       .catch((err) => console.error(err))
       .finally(() => setLoading(false));
-  }, [categoryId, page]);
+  }, [categoryId, page, settingsStore.limit]);
 
   return (
     <View className="flex-1">
