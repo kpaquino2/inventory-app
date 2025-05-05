@@ -33,7 +33,8 @@ export default function Index() {
             paddingRight: 5,
             marginBottom: 10,
           }}
-          className="p-4 mb-4"
+          ListFooterComponent={() => <View className="mb-4" />}
+          className="p-4"
         />
       )}
     </View>
