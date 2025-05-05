@@ -43,4 +43,8 @@ model Product {
   price      Decimal  @db.Money
   Category   Category @relation(fields: [categoryId], references: [id])
   categoryId Int
+
+  @@index([categoryId])
+  @@index([desc])
+  @@index([name])
 }
